@@ -41,12 +41,13 @@ button{width:100%;margin-top:22px;padding:16px;font-size:19px;border:0;border-ra
 </svg><h1>Cafe Hero</h1><p class="group">Part of the Under Pressure Group of Companies</p></header>
 <main id="form">
 <h2>1. What'll it be, madam?</h2><div class="grid" id="drink"></div>
-<h2>2. Drink in or takeaway?</h2><div class="grid" id="where"></div>
-<h2>3. Size</h2><div class="grid" id="size"></div>
-<h2>4. Milk</h2><div class="grid" id="milk"></div>
-<h2>5. Extras (tick away)</h2><div class="grid" id="extras"></div>
-<h2>6. Urgency</h2><div class="grid" id="urgency"></div>
-<h2>7. Words for the barista</h2>
+<h2>2. Tea (tick if wanted)</h2><div class="grid" id="tea"></div>
+<h2>3. Drink in or takeaway?</h2><div class="grid" id="where"></div>
+<h2>4. Size</h2><div class="grid" id="size"></div>
+<h2>5. Milk</h2><div class="grid" id="milk"></div>
+<h2>6. Extras (tick away)</h2><div class="grid" id="extras"></div>
+<h2>7. Urgency</h2><div class="grid" id="urgency"></div>
+<h2>8. Words for the barista</h2>
 <textarea id="note" rows="3" placeholder="e.g. Not like last time."></textarea>
 <button onclick="order()">Place order 🔔</button>
 <p class="small">Payment: no charge.</p>
@@ -55,19 +56,20 @@ button{width:100%;margin-top:22px;padding:16px;font-size:19px;border:0;border-ra
 <script>
 const opts={
 drink:["Cappuccino as you like it"],
+tea:["Weak black"],
 where:["Drink in","Takeaway"],
 size:["Coffee mug","Coffee mug"],
 milk:["Semi-skimmed","Semi-skimmed"],
 extras:["Dark chocolate","Dog hair","Kiss","Argument"],
 urgency:["Whenever","Soonish","Now please","EMERGENCY"]};
-const multi={extras:1};
+const multi={extras:1,tea:1};
 for(const k in opts){const el=document.getElementById(k);opts[k].forEach((o,i)=>{const id=k+i;
 el.insertAdjacentHTML('beforeend',`<input type="${multi[k]?'checkbox':'radio'}" name="${k}" id="${id}" value="${o}" ${!multi[k]&&i==0?'checked':''}><label class="opt" for="${id}">${o}</label>`)})}
 const etas=["The artisan barista is on it.... engaging the Sage..."];
 async function order(){
 const v=k=>[...document.querySelectorAll(`input[name=${k}]:checked`)].map(x=>x.value).join(", ")||"none";
 const note=document.getElementById('note').value.trim();
-const msg=`☕ CAFÉ McGINTY ORDER\nDrink: ${v('drink')}\nWhere: ${v('where')}\nSize: ${v('size')}\nMilk: ${v('milk')}\nExtras: ${v('extras')}\nUrgency: ${v('urgency')}${note?`\nNote: ${note}`:''}`;
+const msg=`☕ CAFÉ McGINTY ORDER\nDrink: ${v('drink')}\nTea: ${v('tea')}\nWhere: ${v('where')}\nSize: ${v('size')}\nMilk: ${v('milk')}\nExtras: ${v('extras')}\nUrgency: ${v('urgency')}${note?`\nNote: ${note}`:''}`;
 try{fetch('https://ntfy.sh/cafe-mcginty-f662b9803489?title='+encodeURIComponent('☕ New Café McGinty order')+'&tags=coffee&priority='+(v('urgency')==='EMERGENCY'?'5':'3'),{method:'POST',body:msg,keepalive:true})}catch(e){}
 document.getElementById('form').style.display='none';document.getElementById('done').style.display='block';
 document.getElementById('eta').textContent=etas[Math.floor(Math.random()*etas.length)];
