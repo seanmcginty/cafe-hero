@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cafe Hero">
+<meta name="theme-color" content="#3b2a1e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E☕%3C/text%3E%3C/svg%3E">
+<title>Cafe Hero</title>
+<style>
+body{font-family:-apple-system,system-ui,sans-serif;margin:0;background:#f6efe6;color:#3b2a1e}
+header{background:#3b2a1e;color:#f6efe6;text-align:center;padding:22px 12px}
+header h1{margin:0;font-size:28px}.logo{display:block;width:170px;height:auto;margin:0 auto 12px;border-radius:18px}.group{font-size:11px!important;letter-spacing:.08em;text-transform:uppercase;opacity:.65!important;margin-top:6px!important}header p{margin:6px 0 0;font-size:14px;opacity:.85}
+main{max-width:480px;margin:auto;padding:16px}
+h2{font-size:17px;margin:20px 0 8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+label.opt{display:block;background:#fff;border:2px solid #e3d5c3;border-radius:12px;padding:10px;font-size:15px;cursor:pointer}
+input[type=radio],input[type=checkbox]{display:none}
+input:checked+label.opt{border-color:#3b2a1e;background:#efe1cf;font-weight:600}
+textarea{width:100%;box-sizing:border-box;border-radius:12px;border:2px solid #e3d5c3;padding:10px;font-size:15px}
+button{width:100%;margin-top:22px;padding:16px;font-size:19px;border:0;border-radius:14px;background:#c0392b;color:#fff;font-weight:700}
+#done{display:none;text-align:center;padding:30px 10px}
+#done h2{font-size:24px}.small{font-size:13px;opacity:.7;text-align:center;margin-top:14px}
+</style></head><body>
+<header><svg class="logo" role="img" aria-label="Cafe Hero logo: Blackpool Tower pouring coffee into a mug" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300">
+<rect width="320" height="300" fill="#f6efe6"/>
+<path d="M60 270 L92 92 M140 270 L118 92" stroke="#3b2a1e" stroke-width="5" fill="none"/>
+<path d="M60.0 270 L134.1 222 M140.0 270 L68.6 222 M68.6 222 H134.1 M68.6 222 L129.1 182 M134.1 222 L75.8 182 M75.8 182 H129.1 M75.8 182 L124.9 148 M129.1 182 L81.9 148 M81.9 148 H124.9 M81.9 148 L121.2 118 M124.9 148 L87.3 118 M87.3 118 H121.2 M87.3 118 L118.0 92 M121.2 118 L92.0 92 M92.0 92 H118.0" stroke="#3b2a1e" stroke-width="2.6" fill="none"/>
+<g fill="#3b2a1e">
+<rect x="50" y="268" width="100" height="10" rx="2"/>
+<rect x="86" y="82" width="38" height="11" rx="2"/>
+<rect x="93" y="66" width="24" height="16"/>
+<path d="M97 66 V56 Q105 44 113 56 V66Z"/>
+<rect x="104" y="26" width="2.5" height="22"/>
+<path d="M120 124 H196 Q214 124 214 142 V152 H202 V144 Q202 136 194 136 H118Z"/>
+</g>
+<path d="M208 152 V196" stroke="#3b2a1e" stroke-width="6" stroke-linecap="round"/>
+<path d="M248 212 h10 q16 0 16 16 v16 q0 16 -16 16 h-10" fill="none" stroke="#111" stroke-width="6"/>
+<path d="M170 196 h80 v76 q0 6 -6 6 h-68 q-6 0 -6 -6z" fill="#fff" stroke="#111" stroke-width="4"/>
+<ellipse cx="210" cy="201" rx="34" ry="3" fill="#3b2a1e"/>
+<text x="210" y="243" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-weight="800" font-size="14" fill="#111">Cafe Hero</text>
+</svg><h1>Cafe Hero</h1><p class="group">Part of the Under Pressure Group of Companies</p></header>
+<main id="form">
+<h2>1. What'll it be, madam?</h2><div class="grid" id="drink"></div>
+<h2>2. Drink in or takeaway?</h2><div class="grid" id="where"></div>
+<h2>3. Size</h2><div class="grid" id="size"></div>
+<h2>4. Milk</h2><div class="grid" id="milk"></div>
+<h2>5. Extras (tick away)</h2><div class="grid" id="extras"></div>
+<h2>6. Urgency</h2><div class="grid" id="urgency"></div>
+<h2>7. Words for the barista</h2>
+<textarea id="note" rows="3" placeholder="e.g. Not like last time."></textarea>
+<button onclick="order()">Place order 🔔</button>
+<p class="small">Payment: no charge.</p>
+</main>
+<div id="done"><h2>Order sent! ✅</h2><p id="eta"></p><button onclick="location.reload()">Order another</button></div>
+<script>
+const opts={
+drink:["Cappuccino as you like it"],
+where:["Drink in","Takeaway"],
+size:["Coffee mug","Coffee mug"],
+milk:["Semi-skimmed","Semi-skimmed"],
+extras:["Dark chocolate","Dog hair","Kiss","Argument"],
+urgency:["Whenever","Soonish","Now please","EMERGENCY"]};
+const multi={extras:1};
+for(const k in opts){const el=document.getElementById(k);opts[k].forEach((o,i)=>{const id=k+i;
+el.insertAdjacentHTML('beforeend',`<input type="${multi[k]?'checkbox':'radio'}" name="${k}" id="${id}" value="${o}" ${!multi[k]&&i==0?'checked':''}><label class="opt" for="${id}">${o}</label>`)})}
+const etas=["The artisan barista is on it.... engaging the Sage..."];
+async function order(){
+const v=k=>[...document.querySelectorAll(`input[name=${k}]:checked`)].map(x=>x.value).join(", ")||"none";
+const note=document.getElementById('note').value.trim();
+const msg=`☕ CAFÉ McGINTY ORDER\nDrink: ${v('drink')}\nWhere: ${v('where')}\nSize: ${v('size')}\nMilk: ${v('milk')}\nExtras: ${v('extras')}\nUrgency: ${v('urgency')}${note?`\nNote: ${note}`:''}`;
+try{fetch('https://ntfy.sh/cafe-mcginty-f662b9803489?title='+encodeURIComponent('☕ New Café McGinty order')+'&tags=coffee&priority='+(v('urgency')==='EMERGENCY'?'5':'3'),{method:'POST',body:msg,keepalive:true})}catch(e){}
+document.getElementById('form').style.display='none';document.getElementById('done').style.display='block';
+document.getElementById('eta').textContent=etas[Math.floor(Math.random()*etas.length)];
+}
+</script></body></html>
